@@ -273,11 +273,12 @@ input:-webkit-autofill:focus {
     font-weight: 700;
     animation: slideInBottom 1s ease both;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    overflow: hidden;
   }
     @keyframes slideInBottom {
     from { 
       opacity: 0; 
-      transform: translatey(-30px); 
+      transform: translatey(-10px); 
     }
     to   { 
       opacity: 1; 
@@ -300,7 +301,6 @@ input:-webkit-autofill:focus {
   }
   .left-inner {
     width: 100%;
-    margin-bottom: 94px;
     max-width: 360px;
     padding: 28px 12px;
     box-sizing: border-box;
@@ -355,7 +355,7 @@ input:-webkit-autofill:focus {
   /* Centered Sign-in form */
   .left-panel {
     order: 0;
-    background: #f1f2f4;
+    background: #f1f2ff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -413,7 +413,7 @@ input:-webkit-autofill:focus {
 
     .right-panel .welcome-copy {
     display: block;          
-    position: fixed;
+    position: sticky;
     left: 0;
     right: 0;
     bottom: 0;
@@ -432,12 +432,12 @@ input:-webkit-autofill:focus {
     line-height: 1.6;
     font-style: italic;
     animation: slideInTop 1s ease both;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
   }
     @keyframes slideInTop {
     from { 
       opacity: 0; 
-      transform: translatey(40px); 
+      transform: translatey(5px); 
     }
     to   { 
       opacity: 1; 
