@@ -272,7 +272,6 @@ input:-webkit-autofill:focus {
     letter-spacing: 3px;
     font-weight: 700;
     animation: slideInBottom 1s ease both;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     overflow: hidden;
   }
     @keyframes slideInBottom {
@@ -444,7 +443,6 @@ input:-webkit-autofill:focus {
       transform: translatey(0); 
     }
   }
-
 
   .right-panel .welcome-copy p {
     margin: 0;
