@@ -3,7 +3,10 @@
   margin: 0; 
   padding: 0; 
 }
-html, body { height: 100%; width: 100%; }
+html, body { 
+  height: 100%; 
+  width: 100%; 
+}
 body {
   font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -37,8 +40,14 @@ body {
   animation: slideInLeft 1s ease both;
 }
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-40px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { 
+    opacity: 0; 
+    transform: translateX(-40px); 
+  }
+  to   { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
 }
 
 /* Right panel (welcome) */
@@ -53,8 +62,14 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(40px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { 
+    opacity: 0; 
+    transform: translateX(40px); 
+  }
+  to   { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
 }
 
 /* Left-inner form container */
@@ -105,7 +120,9 @@ body {
   color: #2b2b2b;
   padding: 6px 4px;
 }
-.input-box input::placeholder { color: #9aa9bb; }
+.input-box input::placeholder { 
+  color: #9aa9bb; 
+}
 
 /* Focus style */
 .input-box:focus-within {
@@ -234,11 +251,13 @@ input:-webkit-autofill:focus {
     border-radius: 0 0 70px 70px;
     box-shadow: none;
   }
-  .brand { left: 14px;
+  .brand { 
+    left: 14px;
     top: 12px; 
   }
-  .brand-logo { width: 36px;
-     height: 36px; 
+  .brand-logo { 
+    width: 36px;
+    height: 36px; 
     }
   .brand-name { 
     font-size: 18px; 
@@ -250,8 +269,20 @@ input:-webkit-autofill:focus {
     margin: 0;
     margin-top: 24px;
     color: #eaf2f7;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     font-weight: 700;
+    animation: slideInBottom 1s ease both;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+    @keyframes slideInBottom {
+    from { 
+      opacity: 0; 
+      transform: translatey(-30px); 
+    }
+    to   { 
+      opacity: 1; 
+      transform: translatey(0); 
+    }
   }
 
   .right-panel .welcome-copy { 
@@ -395,11 +426,25 @@ input:-webkit-autofill:focus {
     padding: 18px 22px;
     border-radius: 70px 70px 0 0;
     z-index: 20;
+    font-weight: 500;
     text-align: center;
     font-size: 14px;
     line-height: 1.6;
     font-style: italic;
+    animation: slideInTop 1s ease both;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   }
+    @keyframes slideInTop {
+    from { 
+      opacity: 0; 
+      transform: translatey(40px); 
+    }
+    to   { 
+      opacity: 1; 
+      transform: translatey(0); 
+    }
+  }
+
 
   .right-panel .welcome-copy p {
     margin: 0;
