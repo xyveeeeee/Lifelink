@@ -1,28 +1,21 @@
-* { box-sizing: 
-  border-box; 
-  margin: 0; 
-  padding: 0; 
-}
-html,body { 
-  height: 100%; 
-  width: 100%; 
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; width: 100%; }
 body {
   font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: #f1f2f4;
+  color: #222;
 }
 
 
 .page-wrapper {
   display: flex;
   width: 100%;
-  height: 100vh;          
+  height: 100vh;
   overflow: hidden;
 }
 
-/* Generic panel */
 .panel {
   flex: 1;
   display: flex;
@@ -32,55 +25,46 @@ body {
   min-width: 320px;
 }
 
+/* Left panelform */
 .left-panel {
-  background: #f1f2f4;   
+  background: #f1f2f4;
   align-items: flex-start;
   justify-content: center;
-  animation: slideInLeft 1.2s ease forwards;
+  animation: slideInLeft 1s ease both;
 }
-@keyframes slideInLeft{
-  0% {
-    opacity: 0;
-    transform: translatex(-100%); 
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
-
+/* Right panel (welcome) */
 .right-panel {
-  background: #35475B;    
+  background: #35475B;
   color: #fff;
   position: relative;
-  border-radius: 80px 0px 0px 80px;
+  border-radius: 80px 0 0 80px;
   align-items: center;
   justify-content: center;
-  animation: slideIn 1.2s ease forwards;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  animation: slideInRight 1s ease both;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateX(100%); 
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
+/* Left-inner form container */
 .left-inner {
   width: 100%;
   max-width: 420px;
   padding-left: 24px;
 }
 
+/* Sign In title */
 .signin-title {
   font-size: 56px;
   font-weight: 700;
-  color: #3f4752;         
+  color: #3f4752;
   margin-bottom: 22px;
   text-align: center;
   margin-top: 80px;
@@ -89,14 +73,14 @@ body {
 /* Labels */
 .field-label {
   display: block;
-  color: #1E3A8A;         
+  color: #1E3A8A;
   font-weight: 600;
   margin-top: 8px;
   margin-bottom: 6px;
   font-size: 16px;
 }
 
-
+/* Input style */
 .input-box {
   width: 100%;
   background: #dfeaf6;
@@ -108,10 +92,6 @@ body {
   border: 1px solid rgba(0,0,0,0.12);
   margin-bottom: 20px;
 }
-form{
-  margin-top: px;
-}
-
 .input-box input {
   width: 100%;
   border: none;
@@ -121,22 +101,16 @@ form{
   color: #2b2b2b;
   padding: 6px 4px;
 }
+.input-box input::placeholder { color: #9aa9bb; }
 
-
-.input-box input::placeholder {
-  color: #9aa9bb;
-}
-
-
+/* Focus style */
 .input-box:focus-within {
   box-shadow:
     inset 0 2px 8px rgba(0,0,0,0.14),
     0 6px 18px rgba(0,0,0,0.08);
   border-color: rgba(30,58,138,0.12);
-  z-index: 20; 
+  z-index: 20;
 }
-
-
 #fpass {
   display: inline-block;
   color: #1E3A8A;
@@ -145,12 +119,7 @@ form{
   font-weight: 600;
 }
 
-.cta-wrap {
-  display: flex;
-  justify-content: center;
-  margin-top: 6px;
-}
-
+.cta-wrap { display: flex; justify-content: center; margin-top: 6px; }
 .btn-primary {
   width: 220px;
   height: 56px;
@@ -159,7 +128,7 @@ form{
   border-radius: 10px;
   font-size: 22px;
   font-weight: 800;
-  color: #000;          
+  color: #000;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(72,187,120,0.18);
   transition: transform .12s ease, background .12s ease;
@@ -183,6 +152,7 @@ form{
   padding: 14px 28px;
 }
 
+
 .brand {
   display: flex;
   align-items: center;
@@ -200,24 +170,19 @@ form{
 .brand-name {
   margin-top: 20px;
   font-size: 40px;
-  color: #39d07a; 
+  color: #39d07a;
   font-weight: 700;
   letter-spacing: 2px;
 }
-
-/* Welcome heading */
 .welcome-heading {
   font-size: 50px;
-  letter-spacing: 1px;
+  letter-spacing: 4px;
   margin-top: 60px;
   margin-left: 10px;
   margin-bottom: 12px;
   color: #eaf2f7;
   font-weight: 700;
-  
-  letter-spacing: 4px;
 }
-
 .welcome-copy {
   max-width: 400px;
   margin: 0 auto;
@@ -229,7 +194,6 @@ form{
   text-align: center;
 }
 
-
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
@@ -240,22 +204,202 @@ input:-webkit-autofill:focus {
 }
 
 @media (max-width: 880px) {
-  .page-wrapper { 
-      flex-direction: column; 
-      height: auto; 
+  .page-wrapper {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .left-panel, .right-panel {
+    min-height: 0;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+    animation: none;
+  }
+
+  .right-panel {
+    order: -1;
+    padding: 0;
+    background: #35475B;
+    position: relative;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0 70px 70px;
+    box-shadow: none;
+  }
+  .brand { left: 14px;
+    top: 12px; 
+  }
+  .brand-logo { width: 36px;
+     height: 36px; 
     }
-  .left-panel, .right-panel { 
-    min-height: 320px; 
-    padding: 28px; 
+  .brand-name { 
+    font-size: 18px; 
+    margin-top: 0; 
   }
-  .signin-title { 
-    font-size: 36px; 
-    text-align: center; 
+
+  .welcome-heading {
+    font-size: 22px;
+    margin: 0;
+    margin-top: 24px;
+    color: #eaf2f7;
+    letter-spacing: 2px;
+    font-weight: 700;
   }
-  .brand { 
-    left: 24px; top: 16px; 
+
+  .right-panel .welcome-copy { 
+    display: none; 
+  }
+
+ 
+  .left-panel {
+    order: 0;
+    background: #f1f2f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px;
+  }
+  .left-inner {
+    width: 100%;
+    margin-bottom: 94px;
+    max-width: 360px;
+    padding: 28px 12px;
+    box-sizing: border-box;
+    background: transparent;
+  }
+  .signin-title {
+    font-size: 36px;
+    text-align: center;
+    margin: 6px 0 18px;
+    margin-top: 18px;
+  }
+
+  .field-label { 
+    margin-left: 6px; 
+  }
+  .input-box { 
+    margin-bottom: 12px; 
+    min-height: 48px; padding: 10px; 
+    border-radius: 8px; 
+  }
+  .input-box input { 
+    font-size: 16px; 
+  }
+
+  #fpass { 
+    margin-left: 6px;
+     display: inline-block; 
+     margin-top: 6px; 
+     font-size: 14px;
+     }
+
+  .cta-wrap {
+     display: flex; 
+     justify-content: center; 
+     margin-top: 12px; 
+    }
+  .btn-primary { 
+    width: 200px;
+     height: 48px; 
+     font-size: 18px; 
+     border-radius: 8px;
+     }
+  .signup-note { 
+    margin-top: 12px; 
+    font-size: 14px; 
+  }
+
+  .right-panel .welcome-copy {
+    display: none;
+  }
+
+  /* Centered Sign-in form */
+  .left-panel {
+    order: 0;
+    background: #f1f2f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px;
+  }
+
+  .left-inner {
+    width: 100%;
+    max-width: 360px;           
+    padding: 28px 12px;
+    box-sizing: border-box;
+    background: transparent;
+  }
+
+  .signin-title {
+    font-size: 36px;
+    text-align: center;
+    margin: 6px 0 18px;
+  }
+
+  .field-label { 
+    margin-left: 6px; 
+  }
+  .input-box { 
+    margin-bottom: 12px; 
+    min-height: 48px; 
+    padding: 10px; 
+    border-radius: 8px; 
+  }
+  .input-box input { 
+    font-size: 16px; 
+  }
+
+  #fpass { 
+    margin-left: 6px; 
+    display: inline-block; 
+    margin-top: 6px; 
+    font-size: 14px;
+  }
+  .cta-wrap { 
+    display: flex; 
+    justify-content: center; 
+    margin-top: 12px; 
   }
   .btn-primary { 
-    width: 70%; 
+    width: 200px; 
+    height: 48px; 
+    font-size: 18px; 
+    border-radius: 8px; 
   }
+  .signup-note { 
+    margin-top: 12px; 
+    font-size: 14px; 
+  }
+
+    .right-panel .welcome-copy {
+    display: block;          
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    background: #35475B;
+    color: rgba(236,239,243,0.95);
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 18px 22px;
+    border-radius: 70px 70px 0 0;
+    z-index: 20;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .right-panel .welcome-copy p {
+    margin: 0;
+    padding: 0 0px;
+  }
+
 }
