@@ -240,6 +240,7 @@ input:-webkit-autofill:focus {
     animation: none;
   }
 
+  /* Top welcome panel */
   .right-panel {
     order: -1;
     padding: 0;
@@ -250,8 +251,8 @@ input:-webkit-autofill:focus {
     align-items: center;
     justify-content: center;
     border-radius: 0 0 70px 70px;
-    box-shadow: none;
   }
+
   .brand { 
     left: 14px;
     top: 12px; 
@@ -259,7 +260,7 @@ input:-webkit-autofill:focus {
   .brand-logo { 
     width: 36px;
     height: 36px; 
-    }
+  }
   .brand-name { 
     font-size: 18px; 
     margin-top: 0; 
@@ -267,95 +268,56 @@ input:-webkit-autofill:focus {
 
   .welcome-heading {
     font-size: 22px;
-    margin: 0;
     margin-top: 24px;
     color: #eaf2f7;
     letter-spacing: 3px;
     font-weight: 700;
     animation: slideInBottom 1s ease both;
-    overflow: hidden;
   }
-    @keyframes slideInBottom {
+  @keyframes slideInBottom {
     from { 
       opacity: 0; 
-      transform: translatey(-10px); 
+      transform: translateY(-10px); 
     }
-    to   { 
+    to { 
       opacity: 1; 
-      transform: translatey(0); 
+      transform: translateY(0); 
     }
   }
 
+  /* Bottom welcome copy (mobile only) */
   .right-panel .welcome-copy { 
-    display: none; 
-  }
-
- 
-  .left-panel {
-    order: 0;
-    background: #f1f2f4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 28px 20px;
-  }
-  .left-inner {
+    display: block;          
+    position: fixed;
+    left: 0;
+    bottom: 0;
     width: 100%;
-    max-width: 360px;
-    padding: 28px 12px;
-    box-sizing: border-box;
-    background: transparent;
-  }
-  .signin-title {
-    font-size: 36px;
+    background: #35475B;
+    color: rgba(236,239,243,0.95);
+    padding: 18px 22px;
+    border-radius: 70px 70px 0 0;
+    font-weight: 500;
     text-align: center;
-    margin: 6px 0 18px;
-    margin-top: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    font-style: italic;
+    animation: slideInTop 1s ease both;
   }
-
-  .field-label { 
-    margin-left: 6px; 
-  }
-  .input-box { 
-    margin-bottom: 12px; 
-    min-height: 48px; padding: 10px; 
-    border-radius: 8px; 
-  }
-  .input-box input { 
-    font-size: 16px; 
-  }
-
-  #fpass { 
-    margin-left: 6px;
-     display: inline-block; 
-     margin-top: 6px; 
-     font-size: 14px;
-     }
-
-  .cta-wrap {
-     display: flex; 
-     justify-content: center; 
-     margin-top: 12px; 
+  @keyframes slideInTop {
+    from { 
+      opacity: 0; 
+      transform: translateY(5px); 
     }
-  .btn-primary { 
-    width: 200px;
-     height: 48px; 
-     font-size: 18px; 
-     border-radius: 8px;
-     }
-  .signup-note { 
-    margin-top: 12px; 
-    font-size: 14px; 
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
   }
 
-  .right-panel .welcome-copy {
-    display: none;
-  }
-
-  /* Centered Sign-in form */
+  /* Left sign-in form */
   .left-panel {
     order: 0;
-    background: #f1f2ff;
+    background: #f1f2f4; /* unified with desktop */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -367,7 +329,6 @@ input:-webkit-autofill:focus {
     max-width: 360px;           
     padding: 28px 12px;
     box-sizing: border-box;
-    background: transparent;
   }
 
   .signin-title {
@@ -376,78 +337,37 @@ input:-webkit-autofill:focus {
     margin: 6px 0 18px;
   }
 
-  .field-label { 
-    margin-left: 6px; 
-  }
+  .field-label { margin-left: 6px; }
   .input-box { 
     margin-bottom: 12px; 
     min-height: 48px; 
     padding: 10px; 
     border-radius: 8px; 
   }
-  .input-box input { 
-    font-size: 16px; 
-  }
+  .input-box input { font-size: 16px; }
 
   #fpass { 
-    margin-left: 6px; 
+    margin-left: 6px;
     display: inline-block; 
     margin-top: 6px; 
     font-size: 14px;
   }
+
   .cta-wrap { 
     display: flex; 
     justify-content: center; 
     margin-top: 12px; 
   }
+
   .btn-primary { 
     width: 200px; 
     height: 48px; 
     font-size: 18px; 
     border-radius: 8px; 
   }
+
   .signup-note { 
     margin-top: 12px; 
     font-size: 14px; 
   }
-
-    .right-panel .welcome-copy {
-    display: block;          
-    position: sticky;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: 0;
-    background: #35475B;
-    color: rgba(236,239,243,0.95);
-    max-width: 100%;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 18px 22px;
-    border-radius: 70px 70px 0 0;
-    z-index: 20;
-    font-weight: 500;
-    text-align: center;
-    font-size: 14px;
-    line-height: 1.6;
-    font-style: italic;
-    animation: slideInTop 1s ease both;
-
-  }
-    @keyframes slideInTop {
-    from { 
-      opacity: 0; 
-      transform: translatey(5px); 
-    }
-    to   { 
-      opacity: 1; 
-      transform: translatey(0); 
-    }
-  }
-
-  .right-panel .welcome-copy p {
-    margin: 0;
-    padding: 0 0px;
-  }
-
 }
