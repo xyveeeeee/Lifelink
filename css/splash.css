@@ -4,7 +4,7 @@ body {
     align-items: center;
     height: 100vh;
     background: linear-gradient(to right, #2c5364, #203a43);
-    overflow: hidden;             /* removed for small screens in media queries */
+    overflow: hidden;      
     font-family: "Michroma", sans-serif;
     margin: 0;
     -webkit-font-smoothing: antialiased;
@@ -196,7 +196,7 @@ body {
     line-height: 1.4;
     white-space: normal;
 
-    animation: mobileFade 0.6s ease forwards 1.2s;
+    animation: mobileFade 0.1s ease forwards 1.2s;
     }
 
   /* Animations */
