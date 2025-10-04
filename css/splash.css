@@ -117,8 +117,8 @@ body {
 /* Phone / small devices */
 @media (max-width: 480px) { 
   body {
-    align-items: center;        /* center items vertically */
-    justify-content: flex-start; /* content starts from top */
+    align-items: center;      
+    justify-content: flex-start; 
     padding-top: 6vh;
     height: auto;              
     overflow: auto;         
@@ -130,11 +130,11 @@ body {
     margin-bottom: 40px;
     transform: translateY(0);
     padding: 0 16px;
-    align-items: center;       /* center children horizontally */
+    align-items: center;       
   }
 
   .logo {
-    margin: 0 auto;            /* center image */
+    margin: 0 auto;           
     width: 140px;         
     max-width: 60vw;
     animation: popUp 1s ease forwards,
