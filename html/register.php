@@ -19,7 +19,7 @@
       <div class="left-inner">
         <h1 class="signin-title">Sign Up</h1>
 
-            <form class="signin-form" action="login_process.php" method="post" autocomplete="on">
+            <form class="signin-form" action="../php/register.php" method="post" autocomplete="on">
             <label for="fullname" class="field-label">Full Name</label>
             <div class="input-box">
                 <input id="fullname" name="fullname" type="text" placeholder="Enter your fullname" required autocomplete="name" />
@@ -28,6 +28,16 @@
             <label for="username" class="field-label">Username</label>
             <div class="input-box">
                 <input id="username" name="username" type="text" placeholder="Enter your username" required autocomplete="username" />
+            </div>
+
+            <label for="role" class="field-label">Role</label>
+            <div class="input-box">
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="donor">Donor</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="Admin">Admin</option>
+                </select>
             </div>
 
             <label for="password" class="field-label">Password</label>
@@ -44,7 +54,7 @@
             <button type="submit" class="btn-primary">Sign In</button>
           </div>
 
-         <p class="signup-note">Already have an account? <a href="Log In.html">Click here</a></p>
+         <p class="signup-note">Already have an account? <a href="Log In.php">Click here</a></p>
 
         </form>
       </div>

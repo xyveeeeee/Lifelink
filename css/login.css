@@ -230,6 +230,7 @@ input:-webkit-autofill:focus {
     flex-direction: column;
     height: auto;
     min-height: 100vh;
+
   }
 
   .left-panel, .right-panel {

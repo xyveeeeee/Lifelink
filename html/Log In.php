@@ -17,7 +17,7 @@
       <div class="left-inner">
         <h1 class="signin-title">Sign In</h1>
 
-        <form class="signin-form" action="login_process.php" method="post" autocomplete="on">
+        <form class="signin-form" action="../php/login_process.php" method="post" autocomplete="on">
           <label for="username" class="field-label">Username</label>
           <div class="input-box">
             <input id="username" name="username" type="text" placeholder="Enter your username" required autocomplete="username" />
@@ -34,7 +34,7 @@
             <button type="submit" class="btn-primary">Sign In</button>
           </div>
 
-          <p class="signup-note">Don't have an account? <a href="register.html">Click here</a></p>
+          <p class="signup-note">Don't have an account? <a href="register.php">Click here</a></p>
         </form>
       </div>
     </section>
@@ -57,8 +57,7 @@
         </p>
       </div>
     </aside>
-
-
   </main>
+  <script src="../javascript/login.js"></script>
 </body>
 </html>
