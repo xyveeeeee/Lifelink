@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 05, 2025 at 10:36 PM
+-- Generation Time: Oct 06, 2025 at 10:44 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -74,6 +74,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `fullname` varchar(100) NOT NULL,
   `username` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
   `role` enum('donor','doctor','admin') NOT NULL,
   `password` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -83,13 +84,14 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `fullname`, `username`, `role`, `password`, `created_at`) VALUES
-(1, 's', 'xav', 'donor', '$2y$10$9k1D1HXv0N7m75c7c/h7VemA4cmE2c.GNFOCwSE/MybqlC6ONU9oO', '2025-10-05 16:25:04'),
-(2, 's', 'xavy', 'doctor', '$2y$10$3sJYIb.rjpg4IJZMLZXTmObvaBcJypWjPLTt9n2YKQHx204OVxOwW', '2025-10-05 17:46:41'),
-(3, 'oussycat', 'meow', 'donor', '$2y$10$K1As2VG2RpaNymhl5wdfn.ScABEwP3XMThsovdAgNw/e8p4c4a0uq', '2025-10-05 19:28:50'),
-(4, 'meowmeow', 'meow2', 'doctor', '$2y$10$fhM947Eqsinz6wUB/BSS8.LHp/ukGjiJaYo1uX67kgvPx6hwL9Upa', '2025-10-05 19:32:02'),
-(5, 'quakquak', 'duck', 'doctor', '$2y$10$SLkPJquZPYc36DXwf.al7e7PONvM/Nzs0/DHH2HPOXAJ9ESjjYI7G', '2025-10-05 19:33:01'),
-(6, 'meowww', 'ps', 'donor', '$2y$10$IGnpd.ncRGrEN.Nld4f9LedB7fCdVkbIzaf9A8nPO/91vIoOjB54i', '2025-10-05 20:17:30');
+INSERT INTO `users` (`id`, `fullname`, `username`, `email`, `role`, `password`, `created_at`) VALUES
+(1, 's', 'xav', '', 'donor', '$2y$10$9k1D1HXv0N7m75c7c/h7VemA4cmE2c.GNFOCwSE/MybqlC6ONU9oO', '2025-10-05 16:25:04'),
+(2, 's', 'xavy', '', 'doctor', '$2y$10$3sJYIb.rjpg4IJZMLZXTmObvaBcJypWjPLTt9n2YKQHx204OVxOwW', '2025-10-05 17:46:41'),
+(3, 'oussycat', 'meow', '', 'donor', '$2y$10$K1As2VG2RpaNymhl5wdfn.ScABEwP3XMThsovdAgNw/e8p4c4a0uq', '2025-10-05 19:28:50'),
+(4, 'meowmeow', 'meow2', '', 'doctor', '$2y$10$fhM947Eqsinz6wUB/BSS8.LHp/ukGjiJaYo1uX67kgvPx6hwL9Upa', '2025-10-05 19:32:02'),
+(5, 'quakquak', 'duck', '', 'doctor', '$2y$10$SLkPJquZPYc36DXwf.al7e7PONvM/Nzs0/DHH2HPOXAJ9ESjjYI7G', '2025-10-05 19:33:01'),
+(6, 'meowww', 'ps', '', 'donor', '$2y$10$IGnpd.ncRGrEN.Nld4f9LedB7fCdVkbIzaf9A8nPO/91vIoOjB54i', '2025-10-05 20:17:30'),
+(7, 'Xaviery Yance A. Jalasco', 'xyveeeee', 'xyve123@gmail.com', 'donor', '$2y$10$WYCLGGoLWRyiNRo2gVmSUOz9Iq6oT9s2smZjFaAABsi9JDMroVeLy', '2025-10-06 20:34:25');
 
 --
 -- Indexes for dumped tables
@@ -150,7 +152,7 @@ ALTER TABLE `patient_requests`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
