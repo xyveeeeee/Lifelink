@@ -41,7 +41,7 @@ XAMPP (for local server)
 Figma (for UI/UX design)
 
 Database Name:
-lifelink_db
+db_lifelink
 
 Main Table:
 users
