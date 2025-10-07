@@ -1,0 +1,186 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background-color: #35475B; 
+  color: #21303a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  animation: kolor .5s ease-in-out;
+}
+@keyframes kolor{
+  from {
+    background-color: #fff;
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    background-color: #35475B;
+  }
+}
+
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 50px;
+  margin-top: 20px;
+
+}
+
+.brand-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.brand-name {
+  color: #53d37b;
+  font-weight: 700;
+  font-size: 40px;
+  letter-spacing: 2px;
+}
+
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 72px);
+  padding: 24px;
+}
+
+.card {
+  margin-bottom: 100px;
+    position: absolute;
+  width: 100%;
+  max-width: 420px;
+  background-color: #e9e9ea;
+  border-radius: 8px;
+  padding: 34px 36px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  animation: popIn 0.28s ease-out;
+}
+
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+.card-title {
+  margin: 0 0 20px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #41505a;
+}
+
+
+.forgot-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.label {
+  width: 100%;
+  text-align: left;
+  font-weight: 600;
+  color: #25485a;
+
+  font-size: 20px;
+}
+
+.input-large {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  background: linear-gradient(180deg, #eef2f6, #dfe6ee);
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.06);
+  font-size: 16px;
+  outline: none;
+  transition: box-shadow 0.15s, border-color 0.15s, transform 0.12s;
+}
+
+.input-large:focus {
+  border-color: #35475B;
+  box-shadow: 0 6px 14px rgba(53, 71, 91, 0.06);
+  transform: translateY(-1px);
+}
+
+
+.btn-cta {
+  width: 60%;
+  min-width: 160px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 16px;
+  background-color: #2ecc71;
+  color: #002217;
+  box-shadow: 0 8px 18px rgba(43, 176, 102, 0.18);
+  transition: background 0.16s, transform 0.12s, box-shadow 0.12s;
+}
+
+.btn-cta:hover {
+  background-color: #2bb066;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(43, 176, 102, 0.22);
+}
+
+
+.small-note {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #25485a;
+  line-height: 1.3;
+}
+
+.small-note a {
+  color: #25485a;
+  text-decoration: underline;
+  font-weight: 600;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #2b2b2b !important;
+  -webkit-box-shadow: 0 0 0px 1000px #dfeaf6 inset !important;
+  box-shadow: 0 0 0px 1000px #dfeaf6 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+@media (max-width: 420px) {
+  .card {
+    padding: 22px;
+  }
+
+  .card-title {
+    font-size: 22px;
+  }
+
+  .btn-cta {
+    width: 100%;
+    min-width: 0;
+  }
+}

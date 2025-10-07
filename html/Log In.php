@@ -28,7 +28,7 @@
             <input id="password" name="password" type="password" placeholder="Enter your password" required autocomplete="current-password" />
           </div>
 
-          <a id="fpass" href="#">Forgot password?</a>
+          <a id="fpass" href="forgot.php">Forgot password?</a>
 
           <div class="cta-wrap">
             <button type="submit" class="btn-primary">Sign In</button>
