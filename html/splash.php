@@ -13,6 +13,6 @@
         <h1 class="wordmark">LIFELINK</h1>
     </div>
         <h3 class="tagline">Connecting Donors and Medical Professionals</h3>
-    /*<script src="../javascript/splash.js"></script>
+    <script src="../javascript/splash.js"></script>
 </body>
 </html>

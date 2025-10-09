@@ -21,11 +21,11 @@
     <section class="card" role="dialog" aria-labelledby="forgotTitle">
       <h1 id="forgotTitle" class="card-title">Forgot Password</h1>
 
-      <form class="forgot-form" action="php/forgot_process.php" method="post" autocomplete="email">
+      <form class="forgot-form" action="../php/send_reset_link.php" method="post" autocomplete="email">
         <label class="label" for="email">Registered Email</label>
 
         <input id="email" name="email" type="email" placeholder="Enter your registered email" required class="input-large" />
-
+        
         <button type="submit" class="btn-cta">Get OTP</button>
 
         <p class="small-note">
@@ -35,5 +35,6 @@
       </form>
     </section>
   </main>
+  <script src="../javascript/alert-handler.js"></script>
 </body>
 </html>

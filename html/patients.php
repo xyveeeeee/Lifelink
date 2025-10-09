@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/doctor_style.css">
+        <link rel="stylesheet" href="../css/patients_style.css">
 
         <title>LifeLink</title>
         <body>
@@ -27,11 +27,11 @@
                         </li>
                         <li class="nav-link">
                             <a href="doctor.php">Donor</a>
-                            <hr class="default-underline">
+                            <hr class="nav-underline">
                         </li>
                         <li class="nav-link">
                             <a href="patients.php">Patients</a>
-                            <hr class="nav-underline">
+                            <hr class="default-underline">
                         </li>
                         <li class="nav-link">
                             <a href="profile.php">Profile</a>
@@ -42,6 +42,41 @@
             </div>
 
             <div class="frame">
+                <ul class="progress-container">
+                    <li class="progress-link">
+                        <a href="#"><h2>Add Patients</h2></a>
+                        <br>
+                        <hr class="progress-underline">
+                    </li>
+                    <br>
+                    <p>(No results...)</p>
+                    <br>
+                    <li class="progress-link">
+                        <a href="#"><h2>Patient List</h2></a>
+                        <br>
+                        <hr class="progress-underline">
+                    </li>
+                    <br>
+                    <p>(No results...)</p>
+                    <br>
+                    <li class="progress-link">
+                        <a href="#"><h2>Matches</h2></a>
+                        <br>
+                        <hr class="progress-underline">
+                    </li>
+                    <br>
+                    <p>(No results...)</p>
+                    <br>
+                    <li class="progress-link">
+                        <a href="#"><h2>Reports</h2></a>
+                        <br>
+                        <hr class="progress-underline">
+                    </li>
+                    <br>
+                    <p>(No results...)</p>
+                    <br>
+                </ul>
+
                 <div class="placeholder">
                     <p></p>
                 </div>

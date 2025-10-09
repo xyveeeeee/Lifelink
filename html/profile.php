@@ -1,9 +1,13 @@
+<?php
+$required_role = 'doctor';
+require_once '../php/check_session.php';
+?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/doctor_style.css">
+        <link rel="stylesheet" href="../css/profile_style.css">
 
         <title>LifeLink</title>
         <body>
@@ -27,7 +31,7 @@
                         </li>
                         <li class="nav-link">
                             <a href="doctor.php">Donor</a>
-                            <hr class="default-underline">
+                            <hr class="nav-underline">
                         </li>
                         <li class="nav-link">
                             <a href="patients.php">Patients</a>
@@ -35,16 +39,16 @@
                         </li>
                         <li class="nav-link">
                             <a href="profile.php">Profile</a>
-                            <hr class="nav-underline">
+                            <hr class="default-underline">
                         </li>
                     </ul>
                 </div>
             </div>
 
             <div class="frame">
-                <div class="placeholder">
-                    <p></p>
-                </div>
+                        <p>Dr. <?php echo htmlspecialchars($_SESSION['fullname']); ?></p>
+                        <p>Gmail: <?php echo htmlspecialchars($_SESSION['email']); ?></p>
+                        <a href="Log In.php">Log out</a>
             </div>
         </body>
     </head>
