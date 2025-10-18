@@ -54,13 +54,13 @@ if ($result && $result->num_rows === 1) {
 
         // spisipik access por the role
         if ($_SESSION['role'] === 'admin') {
-            header('Location: ../php/admin_dashboard.php');
+            header('Location: ../html/admin.php');
             exit;
         } elseif ($_SESSION['role'] === 'doctor') {
-            header('Location: ../html/dashboard.php');
+            header('Location: ../html/doctor_panel/landing_page.php');
             exit;
         } elseif ($_SESSION['role'] === 'donor') {
-            header('Location: ../html/donor.php');
+            header('Location: ../html/donation.php');
             exit;
         } else {
             header('Location: ../html/splash.php');

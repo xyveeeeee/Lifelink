@@ -1,0 +1,216 @@
+/* DEFAULT INTERFACE */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img {
+    image-rendering: crisp-edges;
+}
+
+body, button, input {
+    font-family: 'Poppins', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+hr {
+    border: none;
+    border-radius: 10px;
+    height: 2.5px;
+    background-color: #2DAF89;
+}
+
+li {
+    color: white;
+}
+
+p {
+    font-size: 16px;
+}
+
+h2 {
+    color: #0022FF;
+    font-size: 20px;
+}
+
+body {
+    width: 100%;
+    background-color: #E1E1E1;
+}
+
+button {
+    color: black;
+    background-color: #8EE861;
+    border: none;
+    border-radius: 10px;
+}
+
+input {
+    border: 2.5px solid #D9D9D9;
+    border-radius: 10px;
+}
+
+input:hover {
+    border: 2.5px solid #2DAF89;
+}
+
+input:focus {
+    outline: none;
+    border: 2.5px solid #8EE861;
+}
+
+.match-text {
+    color: black;
+    font-size: 22px;
+}
+
+/* DASHBOARD CONTENT */ 
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+}
+
+.content-container-1 {
+    background-color: white;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    width: 500px;
+    height: 100%;
+    margin: 10px;
+    text-align: center;
+    padding: 20px;
+}
+
+.interactive-underline {
+    background-color: #D9D9D9;
+}
+
+.group-pending {
+    display: flex;
+}
+
+.interactive-content:hover .interactive-underline {
+    background-color: #2DAF89;
+}
+
+form {
+    display: grid;
+}
+
+input, button {
+    padding: 8px;
+    margin: 4px;
+}
+
+.content-container-2 {
+    background-color: white;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    text-align: left;
+    padding: 20px;
+    height: 100%;
+    margin: 10px;
+}
+
+.match-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.match-underline {
+    background-color: #D9D9D9;
+}
+
+.matching-table:hover .match-underline {
+    background-color: #2DAF89;
+}
+
+.texts {
+    display: flex;
+    gap: 4px;
+}
+
+.black-text, .other-text {
+    color: black;
+}
+
+.results {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.box {
+    border: 2.5px solid #D9D9D9;
+    border-radius: 10px;
+    text-align: left;
+    padding: 10px;
+    width: 100%;
+}
+
+.boxes:hover .box {
+    border: 2.5px solid #2DAF89;
+}
+
+table { 
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+}
+
+table:hover th {
+    background-color: #2DAF89;
+    border: 2px solid #2DAF89;
+}
+
+.interactive-content:hover th {
+    border: 2px solid #2DAF89;
+    background-color: #2DAF89;
+}
+
+th {
+    border: 2px solid #9d9d9d;
+    padding: 8px;
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+th {
+    background-color: #9d9d9d;
+    color: white;
+}
+
+.reports-content {
+    display: flex;
+    flex-wrap: wrap;
+    width: 800px;
+    justify-content: center;
+}
+
+.report-box {
+    border: 2.5px solid #E1E1E1;
+    width: 380px;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.reports-content:hover .report-box {
+    border: 2.5px solid #2DAF89;
+}

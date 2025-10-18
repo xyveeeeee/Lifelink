@@ -1,0 +1,349 @@
+            
+            .page-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            }
+
+            .panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 67px;
+            min-width: 320px;
+            }
+
+            /* Left panel form */
+            .left-panel {
+            background: #f1f2f4;
+            align-items: flex-start;
+            justify-content: center;
+            animation: slideInRight 1s ease both;
+              box-shadow: 0 6px 18px rgba(72, 187, 120, 0.18);
+            }
+
+            @keyframes slideInRight {
+            from {
+                opacity: .5;
+                transform: translateX(1000px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(770px);
+            }
+            }
+
+            /* Right panel (welcome) */
+            .right-panel {
+            background: #E1E1E1;
+            color: #fff;
+            position: relative;
+            border-radius: 80px 0 0 80px;
+            align-items: center;
+            justify-content: center;
+            animation: slideInLeft 1s ease both;
+            }
+
+            @keyframes slideInLeft {
+            from {
+                border-radius: 80px 0 0 80px;
+                opacity: .5;
+                transform: translateX(-1000px);
+            }
+            to {
+                border-radius: 0 80px 80px 0;
+                opacity: 1;
+                transform: translateX(-770px);
+            }
+            }
+
+            /* Left-inner form container */
+            .left-inner {
+            width: 100%;
+            max-width: 420px;
+            padding-left: 24px;
+            overflow: hidden;
+            }
+
+            /* Sign In title */
+            .signin-title {
+            font-size: 40px;
+            font-weight: 700;
+            color: #3f4752;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 3px;
+            }
+
+            /* Labels */
+            .field-label {
+            display: block;
+            color: #1E3A8A;
+            font-weight: 600;
+            font-size: 16px;
+            }
+
+            /* Input style */
+            .input-box {
+            width: 100%;
+            background: #dfeaf6;
+            border-radius: 8px;
+            padding: 5px;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12),
+                        0 2px 6px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            margin-bottom: 10px;
+            }
+
+            .input-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 18px;
+            color: #2b2b2b;
+            padding: 6px 4px;
+            }
+
+            .input-box input::placeholder {
+            color: #9aa9bb;
+            }
+
+            .input-box:focus-within {
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.14),
+                        0 6px 18px rgba(0, 0, 0, 0.08);
+            border-color: rgba(30, 58, 138, 0.12);
+            z-index: 20;
+            }
+
+            #organ {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 18px;
+            color: #2b2b2b;
+            padding: 6px 4px;
+            appearance: none;
+            }
+
+            #organ:invalid {
+            color: #9aa9bb;
+            }
+
+            /* Custom arrow to da right */
+            #organ {
+            background-image: linear-gradient(45deg, transparent 50%, #1E3A8A 50%),
+                                linear-gradient(135deg, #1E3A8A 50%, transparent 50%);
+            background-position: calc(100% - 20px) calc(50% - 3px),
+                                calc(100% - 15px) calc(50% - 3px);
+            background-size: 6px 6px, 6px 6px;
+            background-repeat: no-repeat;
+            padding-right: 40px;
+            }
+
+            #donationType {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 18px;
+            color: #2b2b2b;
+            padding: 6px 4px;
+            appearance: none;
+            }
+
+            #donationType:invalid {
+            color: #9aa9bb;
+            }
+
+            /* Custom arrow to da right */
+            #donationType {
+            background-image: linear-gradient(45deg, transparent 50%, #1E3A8A 50%),
+                                linear-gradient(135deg, #1E3A8A 50%, transparent 50%);
+            background-position: calc(100% - 20px) calc(50% - 3px),
+                                calc(100% - 15px) calc(50% - 3px);
+            background-size: 6px 6px, 6px 6px;
+            background-repeat: no-repeat;
+            padding-right: 40px;
+            }
+
+            #blood {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 18px;
+            color: #2b2b2b;
+            padding: 6px 4px;
+            appearance: none;
+            }
+
+            #blood:invalid {
+            color: #9aa9bb;
+            }
+
+            /* Custom arrow to da right */
+            #blood {
+            background-image: linear-gradient(45deg, transparent 50%, #1E3A8A 50%),
+                                linear-gradient(135deg, #1E3A8A 50%, transparent 50%);
+            background-position: calc(100% - 20px) calc(50% - 3px),
+                                calc(100% - 15px) calc(50% - 3px);
+            background-size: 6px 6px, 6px 6px;
+            background-repeat: no-repeat;
+            padding-right: 40px;
+            }
+
+            /* Consistent styling for all blood volume selects */
+            /* ===== Additional Dropdown Styles for Blood Types ===== */
+
+#wholetype,
+#platetype,
+#plasmatype,
+#redtype {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 18px;
+  color: #2b2b2b;
+  padding: 6px 4px;
+  appearance: none;
+}
+
+#wholetype:invalid,
+#platetype:invalid,
+#plasmatype:invalid,
+#redtype:invalid {
+  color: #9aa9bb;
+}
+
+/* Custom arrow to the right (same as #blood) */
+#wholetype,
+#platetype,
+#plasmatype,
+#redtype {
+  background-image: 
+    linear-gradient(45deg, transparent 50%, #1E3A8A 50%),
+    linear-gradient(135deg, #1E3A8A 50%, transparent 50%);
+  background-position: 
+    calc(100% - 20px) calc(50% - 3px),
+    calc(100% - 15px) calc(50% - 3px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 40px;
+}
+
+
+            
+
+            #hospitals {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 18px;
+            color: #2b2b2b;
+            padding: 6px 4px;
+            appearance: none;
+            }
+
+            #hospitals:invalid {
+            color: #9aa9bb;
+            }
+
+            /* Custom arrow to da right */
+            #hospitals {
+            background-image: linear-gradient(45deg, transparent 50%, #1E3A8A 50%),
+                                linear-gradient(135deg, #1E3A8A 50%, transparent 50%);
+            background-position: calc(100% - 20px) calc(50% - 3px),
+                                calc(100% - 15px) calc(50% - 3px);
+            background-size: 6px 6px, 6px 6px;
+            background-repeat: no-repeat;
+            padding-right: 40px;
+            }
+
+            .checkbox-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            }
+
+            .checkbox-wrap input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            }
+            .cta-wrap {
+            display: flex;
+            flex-direction: column; 
+            align-items: center;    
+            margin-top: 20px;
+            gap: 10px;           
+            }
+
+            .btn-primary {
+            width: 220px;
+            height: 56px;
+            background: #48BB78;
+            border: none;
+            border-radius: 10px;
+            font-size: 22px;
+            font-weight: 800;
+            color: #000;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(72, 187, 120, 0.18);
+            transition: transform .12s ease, background .12s ease;
+            }
+
+            .btn-primary:hover {
+            transform: translateY(-3px);
+            background: #3ea766;
+            }
+
+            .signup-note {
+            text-align: center;
+            color: #163a79;
+            font-weight: 600;
+            font-size: 16px;
+            }
+
+            .right-inner {
+            width: 100%;
+            text-align: center;
+            padding: 14px 28px;
+            }
+
+            .welcome-heading {
+            width: 100%;
+            font-size: 38px;
+            letter-spacing: 4px;
+            margin-left: 10px;
+            margin-bottom: 12px;
+            color: #35475B;
+            font-weight: 700;
+            text-align: center;
+            }
+
+            .welcome-copy {
+            max-width: 420px;
+            margin: 0 auto;
+            font-size: 20px;
+            word-spacing: 3px;
+            color: #35475B;
+            line-height: 1.8;
+            font-style: italic;
+            text-align: center;
+            }
+
+            input:-webkit-autofill,
+            input:-webkit-autofill:hover,
+            input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #2b2b2b !important;
+            -webkit-box-shadow: 0 0 0px 1000px #dfeaf6 inset !important;
+            box-shadow: 0 0 0px 1000px #dfeaf6 inset !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
