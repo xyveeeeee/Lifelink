@@ -21,75 +21,166 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     try {
         switch($action) {
-            case 'add_donor':
-                $stmt = $conn->prepare("INSERT INTO donations (user_id, fullname, email, blood_type, organ, status) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->execute([
-                    $_POST['donor_id'],
-                    $_POST['name'],
-                    $_POST['email'],
-                    $_POST['blood_type'],
-                    $_POST['organ'],
-                    $_POST['status']
-                ]);
-                $message = "Donor added successfully!";
+            //add admin
+        case 'add_donor': 
+            // Validate passwords first
+            if ($_POST['password'] !== $_POST['cpassword']) {
+                $message = "Passwords do not match!";
                 break;
+            }
+
+            $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+            $stmt = $conn->prepare("INSERT INTO users (fullname, username, email, role, password, created_at) 
+                                    VALUES (?, ?, ?, ?, ?, NOW())");
+
+            // Execute with the correct field order
+            $stmt->execute([
+                $_POST['name'],       // fullname
+                $_POST['donor_id'],   // username
+                $_POST['email'],      // email
+                $_POST['role'],       // role (e.g., 'admin')
+                $hashedPassword       // password (hashed)
+            ]);
+
+            $message = "Admin added successfully!";
+            break;
             case 'update_donor':
-                $stmt = $conn->prepare("UPDATE donors SET name=?, email=?, blood_type=?, organ=?, status=? WHERE id=?");
+                $stmt = $conn->prepare("UPDATE users SET fullname=?, username=?, email=?, phone=?, location=? WHERE id=?");
                 $stmt->execute([
-                    $_POST['name'],
+                    $_POST['fullname'],
+                    $_POST['username'],
                     $_POST['email'],
-                    $_POST['blood_type'],
-                    $_POST['organ'],
-                    $_POST['status'],
+                    $_POST['phone'],
+                    $_POST['location'],
                     $_POST['id']
                 ]);
-                $message = "Donor updated successfully!";
+                $message = "Updated successfully!";
                 break;
                 
             case 'delete_donor':
-                $stmt = $conn->prepare("DELETE FROM donors WHERE id=?");
+                $stmt = $conn->prepare("DELETE FROM users WHERE id=?");
                 $stmt->execute([$_POST['id']]);
                 $message = "Donor deleted successfully!";
                 break;
-                
-            case 'add_donation':
-                $stmt = $conn->prepare("INSERT INTO donations (donation_id, donor_id, organ, status, date_requested) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([
-                    $_POST['donation_id'],
-                    $_POST['donor_id'],
-                    $_POST['organ'],
-                    $_POST['status'],
-                    $_POST['date_requested']
-                ]);
-                $message = "Donation record added successfully!";
+
+            //add doctor
+           case 'add_doctor':
+            if ($_POST['password'] !== $_POST['cpassword']) {
+                $message = "Passwords do not match!";
                 break;
-                
-            case 'update_donation':
-                $stmt = $conn->prepare("UPDATE donations SET organ=?, status=?, date_updated=? WHERE id=?");
+            }
+
+            $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+            // Insert into users table
+            $stmt = $conn->prepare("
+                INSERT INTO users (fullname, username, email, phone, location, role, password, created_at)
+                VALUES (?, ?, ?, ?, ?, 'doctor', ?, NOW())
+            ");
+            $stmt->execute([
+                $_POST['fullname'],
+                $_POST['username'],
+                $_POST['email'],
+                $_POST['phone'],
+                $_POST['location'],
+                $hashedPassword
+            ]);
+
+            // Get new user ID
+            $user_id = $conn->lastInsertId();
+
+            // Insert into doctor table
+            $stmt2 = $conn->prepare("
+                INSERT INTO doctor (username, email, phone_num, name, age, gender, license, location, description, created_at)
+                VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+            ");
+            $stmt2->execute([
+                $_POST['username'],   // username
+                $_POST['email'],      // email
+                $_POST['phone'],      // phone_num
+                $_POST['fullname'],   // name (full name)
+                $_POST['age'] ?? null,      // optional
+                $_POST['gender'] ?? null,   // optional
+                $_POST['license'] ?? null,  // optional
+                $_POST['location'],         // workplace
+                $_POST['description'] ?? null // optional
+            ]);
+
+            $message = "Doctor added successfully!";
+            break;
+
+                            
+            case 'update_doctor': 
+                // ✅ Update users table
+                $stmt = $conn->prepare("
+                    UPDATE users 
+                    SET fullname = ?, username = ?, email = ?, phone = ?, location = ? 
+                    WHERE id = ?
+                ");
                 $stmt->execute([
-                    $_POST['organ'],
-                    $_POST['status'],
-                    date('Y-m-d'),
+                    $_POST['fullname'],
+                    $_POST['username'],
+                    $_POST['email'],
+                    $_POST['phone'],
+                    $_POST['location'],
                     $_POST['id']
                 ]);
-                $message = "Donation updated successfully!";
+
+                // ✅ Also update doctor table
+                $stmt2 = $conn->prepare("
+                    UPDATE doctor 
+                    SET name = ?, username = ?, email = ?, phone_num = ?, location = ? 
+                    WHERE id = ?
+                ");
+                $stmt2->execute([
+                    $_POST['fullname'],   // doctor.name = users.fullname
+                    $_POST['username'],
+                    $_POST['email'],
+                    $_POST['phone'],
+                    $_POST['location'],
+                    $_POST['id']
+                ]);
+
+                $message = "Doctor updated successfully!";
                 break;
-                
-            case 'delete_donation':
-                $stmt = $conn->prepare("DELETE FROM donations WHERE id=?");
-                $stmt->execute([$_POST['id']]);
-                $message = "Donation deleted successfully!";
-                break;
+
+            case 'delete_donation': 
+            // ✅ Delete from doctor table first (if exists)
+            $stmt1 = $conn->prepare("DELETE FROM doctor WHERE id = ?");
+            $stmt1->execute([$_POST['id']]);
+
+            // ✅ Then delete from users table
+            $stmt2 = $conn->prepare("DELETE FROM users WHERE id = ?");
+            $stmt2->execute([$_POST['id']]);
+
+            $message = "Doctor deleted successfully!";
+            break;
                 
             case 'add_notification':
-                $stmt = $conn->prepare("INSERT INTO notifications (user_id, message, date) VALUES (?, ?, ?)");
-                $stmt->execute([
-                    $_POST['user_id'],
-                    $_POST['message'],
-                    $_POST['date']
-                ]);
-                $message = "Notification added successfully!";
+                // Validate input first
+                if (empty($_POST['user_id']) || empty($_POST['message'])) {
+                    $error = "User ID and message are required.";
+                    break;
+                }
+
+                try {
+                    // Insert new notification
+                    $stmt = $conn->prepare("
+                        INSERT INTO notifications (user_id, message, created_at)
+                        VALUES (:user_id, :message, NOW())
+                    ");
+                    $stmt->execute([
+                        ':user_id' => $_POST['user_id'],
+                        ':message' => $_POST['message']
+                    ]);
+
+                    $message = "Notification added successfully!";
+                } catch (PDOException $e) {
+                    $error = "Error adding notification: " . $e->getMessage();
+                }
                 break;
+
         }
     } catch(PDOException $e) {
         $error = "Error: " . $e->getMessage();
@@ -97,9 +188,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch data
-$donors = $conn->query("SELECT * FROM donors ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+$donors = $conn->query("SELECT * FROM users WHERE role = 'donor' ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
 $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
-//$notifications = $conn->query("SELECT * FROM notifications ORDER BY id DESC LIMIT 10")->fetchAll(PDO::FETCH_ASSOC);
+
+
+$users = $conn->query("SELECT * FROM users WHERE role = 'admin' ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+$users1 = $conn->query("SELECT * FROM users WHERE role = 'doctor' ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+
+$notifications = $conn->query("SELECT * FROM notifications ORDER BY id DESC LIMIT 10")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -194,9 +290,8 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
             transition: background 0.15s, transform 0.12s;
         }
 
-        .nav-item:hover {
-            background: rgba(255,255,255,0.03);
-            transform: translateX(4px);
+        #nav-items {
+            background: rgba(14, 100, 106, 0.37);
         }
 
         .nav-item .icon {
@@ -209,9 +304,12 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
             border-radius: 6px;
             font-size: 14px;
         }
-
+        #nav-items.active {
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateX(4px);
+        }
         .nav-item.active {
-            background: rgba(255,255,255,0.06);
+            background: rgba(42, 246, 31, 0.06);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
             color: #ffffff;
         }
@@ -370,32 +468,32 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
 
                 <nav class="nav-list" role="navigation" aria-label="Sidebar">
                     <!-- Keep these items simple — you can change text or add links -->
-                    <div class="nav-item active" onclick="scrollToSection('dashboard')">
+                    <div class="nav-item" id="nav-items" #onclick="scrollToSection('dashboard')">
                         <div class="icon">🏠</div>
                         <div>Dashboard</div>
                     </div>
 
-                    <div class="nav-item" onclick="showTab('donors')">
+                    <div class="nav-item active"  onclick="showTab('donors')">
                         <div class="icon">👥</div>
-                        <div>Donors</div>
+                        <div>Add Admin</div>
                     </div>
 
-                    <div class="nav-item" onclick="showTab('donations')">
+                    <div class="nav-item"  onclick="showTab('donations')">
                         <div class="icon">🩺</div>
-                        <div>Donations</div>
+                        <div>Add Doctor</div>
                     </div>
 
-                    <div class="nav-item" onclick="showTab('notifications')">
+                    <div class="nav-item"  onclick="showTab('notifications')">
                         <div class="icon">🔔</div>
                         <div>Notifications</div>
                     </div>
 
-                    <div class="nav-item" onclick="window.location='#'">
+                    <div class="nav-item"  onclick="window.location='#'">
                         <div class="icon">📁</div>
                         <div>Records</div>
                     </div>
 
-                    <div class="nav-item" onclick="window.location='#'">
+                    <div class="nav-item"  onclick="window.location='#'">
                         <div class="icon">⚙️</div>
                         <div>Settings</div>
                     </div>
@@ -413,17 +511,19 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
         <!-- MAIN -->
         <div class="main">
             <div class="header">
-                <h1>Hi, Dr. Ranz Kurt!</h1>
-                <p>Manage donors, donations, and notifications</p>
+                <h1>Hi, <?php echo htmlspecialchars($_SESSION['fullname']); ?></h1>
+                <p>Manage accounts for admin, doctor, and notifications</p>
             </div>
 
             <div class="content">
-                <?php if(isset($message)): ?>
-                    <div class="message success"><?= $message ?></div>
+                <?php if (isset($message)): ?>
+                    <div id="successMessage" class="message success">
+                        <?= htmlspecialchars($message) ?>
+                    </div>
                 <?php endif; ?>
 
                 <?php if(isset($error)): ?>
-                    <div class="message error"><?= $error ?></div>
+                    <div id="successMessage"class="message error"><?= $error ?></div>
                 <?php endif; ?>
 
                 <!-- Statistics -->
@@ -449,35 +549,39 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
                 <!-- Tabs -->
 
                 <div class="tab-content active" id="donors">
-                    <h2>Donor Management</h2>
-                    <button class="btn btn-primary" onclick="openModal('addDonorModal')" style="margin: 20px 0;">+ Add New Donor</button>
+                    <h2>Admin Management</h2>
+                    <button class="btn btn-primary" onclick="openModal('addDonorModal')" style="margin: 20px 0;">+ Add New Admin</button>
                     
                     <table>
                         <thead>
                             <tr>
-                                <th>Donor ID</th>
+                                <th>Username</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Blood Type</th>
-                                <th>Organ</th>
-                                <th>Status</th>
+                                <th>Phone Number</th>
+                                <th>Location</th>
+                                <th>Account Created</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($donors as $donor): ?>
+                            <?php foreach($users as $user): ?>
                             <tr>
-                                <td><?= htmlspecialchars($donor['donor_id']) ?></td>
-                                <td><?= htmlspecialchars($donor['name']) ?></td>
-                                <td><?= htmlspecialchars($donor['email']) ?></td>
-                                <td><?= htmlspecialchars($donor['blood_type']) ?></td>
-                                <td><?= htmlspecialchars($donor['organ']) ?></td>
-                                <td><span class="status-badge status-<?= strtolower($donor['status']) ?>"><?= htmlspecialchars($donor['status']) ?></span></td>
+                                <td><?= htmlspecialchars($user['username']) ?></td>
+                                <td><?= htmlspecialchars($user['fullname']) ?></td>
+                                <td><?= htmlspecialchars($user['email']) ?></td>
+                                <td><?= htmlspecialchars($user['phone']) ?></td>
+                                <td><?= htmlspecialchars($user['location']) ?></td>
+                                <td><?= htmlspecialchars($user['created_at']) ?></td>
                                 <td class="action-buttons">
-                                    <button class="btn btn-warning btn-small" onclick='editDonor(<?= json_encode($donor) ?>)'>Edit</button>
+                                    <button class="btn btn-warning btn-small" 
+                                    onclick='editDonor(<?= htmlspecialchars(json_encode($user), ENT_QUOTES, "UTF-8") ?>)'> 
+                                    Edit
+                                    </button>
+
                                     <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this donor?')">
                                         <input type="hidden" name="action" value="delete_donor">
-                                        <input type="hidden" name="id" value="<?= $donor['id'] ?>">
+                                        <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                         <button type="submit" class="btn btn-danger btn-small">Delete</button>
                                     </form>
                                 </td>
@@ -488,34 +592,35 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
                 </div>
 
                 <div class="tab-content" id="donations">
-                    <h2>Donation Management</h2>
-                    <button class="btn btn-primary" onclick="openModal('addDonationModal')" style="margin: 20px 0;">+ Add New Donation</button>
+                    <h2>Doctor Management</h2>
+                    <button class="btn btn-primary" onclick="openModal('addDonationModal')" style="margin: 20px 0;">+ Add New Doctor</button>
                     <table>
                         <thead>
                             <tr>
-                                <th>Donation ID</th>
-                                <th>Donor ID</th>
-                                <th>Organ</th>
-                                <th>Status</th>
-                                <th>Date Requested</th>
-                                <th>Date Updated</th>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Location</th>
+                                <th>Account Created</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($donations as $donation): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($donation['id']) ?></td>
-                                <td><?= htmlspecialchars($donation['user_id']) ?></td>
-                                <td><?= htmlspecialchars($donation['organ_type']) ?></td>
-                                <td><span class="status-badge status-<?= strtolower($donation['status']) ?>"><?= htmlspecialchars($donation['status']) ?></span></td>
-                                <td><?= htmlspecialchars($donation['created_at']) ?></td>
-                                <td><?= htmlspecialchars($donation['availability_date'] ?? '-') ?></td>
+                            <?php foreach($users1 as $user): ?>
+                        <tr>
+                                <td><?= htmlspecialchars($user['username']) ?></td>
+                                <td><?= htmlspecialchars($user['fullname']) ?></td>
+                                <td><?= htmlspecialchars($user['email']) ?></td>
+                                <td><?= htmlspecialchars($user['phone']) ?></td>
+                                <td><?= htmlspecialchars($user['location']) ?></td>
+                                <td><?= htmlspecialchars($user['created_at'] ?? '-') ?></td>
                                 <td class="action-buttons">
-                                    <button class="btn btn-warning btn-small" onclick='editDonation(<?= json_encode($donation) ?>)'>Edit</button>
-                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this donation?')">
-                                        <input type="hidden" name="action" value="delete_donation">
-                                        <input type="hidden" name="id" value="<?= $donation['id'] ?>">
+                                    <button class="btn btn-warning btn-small" onclick='editDoctor(<?= json_encode($user) ?>)'>Edit</button>
+
+                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this doctor?')">
+                                        <input type="hidden" name="action" value="delete_donor">
+                                        <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                         <button type="submit" class="btn btn-danger btn-small">Delete</button>
                                     </form>
                                 </td>
@@ -539,87 +644,78 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <?php foreach($notifications as $notif): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($notif['id']) ?></td>
-                                <td><?= htmlspecialchars($notif['user_id']) ?></td>
-                                <td><?= htmlspecialchars($notif['message']) ?></td>
-                                <td><?= htmlspecialchars($notif['date']) ?></td>
-                                <td><span class="status-badge status-active">Sent</span></td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
+                            <tbody>
+                                <?php if (!empty($notifications)): ?>
+                                    <?php foreach ($notifications as $notif): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($notif['id']) ?></td>
+                                        <td><?= htmlspecialchars($notif['user_id']) ?></td>
+                                        <td><?= htmlspecialchars($notif['message']) ?></td>
+                                        <td><?= htmlspecialchars($notif['created_at']) ?></td>
+                                        <td><span class="status-badge status-active">Sent</span></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5" style="text-align:center; color:gray;">No notifications yet.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Add Donor Modal -->
+    <!-- Add Admin Modal -->
     <div id="addDonorModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add New Donor</h2>
+                <h2>Add New Admin</h2>
                 <span class="close-btn" onclick="closeModal('addDonorModal')">&times;</span>
             </div>
             <form method="POST">
                 <input type="hidden" name="action" value="add_donor">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Donor ID</label>
-                        <input type="text" name="donor_id" required>
+                        <label>Full Name</label>
+                        <input type="text" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" name="name" required>
+                        <label>Username</label>
+                        <input type="text" name="donor_id" required>
                     </div>
                     <div class="form-group">
                         <label>Email</label>
                         <input type="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label>Blood Type</label>
-                        <select name="blood_type" required>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
-                        </select>
+                        <label>Role</label>
+                        <select id="role" name="role" required>
+                        <option>admin</option>
+                </select>
                     </div>
                     <div class="form-group">
-                        <label>Organ</label>
-                        <select name="organ" required>
-                            <option value="Kidney">Kidney</option>
-                            <option value="Liver">Liver</option>
-                            <option value="Heart">Heart</option>
-                            <option value="Lung">Lung</option>
-                            <option value="Pancreas">Pancreas</option>
-                        </select>
+                        <label>Password</label>
+                        <input id="password" name="password" type="password" placeholder="Enter your password" 
+                        required autocomplete="current-password" minlength="8" />
                     </div>
                     <div class="form-group">
-                        <label>Status</label>
-                        <select name="status" required>
-                            <option value="Active">Active</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Inactive">Inactive</option>
-                        </select>
+                        <label>Confirm Password</label>
+                        <input id="cpassword" name="cpassword" type="password" placeholder="Enter your password" 
+                        required autocomplete="current-password" minlength="8"/>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Donor</button>
+                <button type="submit" class="btn btn-primary">Add Admin</button>
             </form>
         </div>
     </div>
 
-    <!-- Edit Donor Modal -->
+    <!-- Edit Admin Modal -->
     <div id="editDonorModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Edit Donor</h2>
+                <h2>Edit Admin</h2>
                 <span class="close-btn" onclick="closeModal('editDonorModal')">&times;</span>
             </div>
             <form method="POST" id="editDonorForm">
@@ -627,155 +723,178 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
                 <input type="hidden" name="id" id="edit_donor_id">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" name="name" id="edit_donor_name" required>
+                        <label>Username</label>
+                        <input type="text" name="username" id="edit_donor_username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="fullname" id="edit_donor_name" required>
                     </div>
                     <div class="form-group">
                         <label>Email</label>
                         <input type="email" name="email" id="edit_donor_email" required>
                     </div>
                     <div class="form-group">
-                        <label>Blood Type</label>
-                        <select name="blood_type" id="edit_donor_blood_type" required>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
-                        </select>
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" id="edit_donor_phone" required>
+
                     </div>
                     <div class="form-group">
-                        <label>Organ</label>
-                        <select name="organ" id="edit_donor_organ" required>
-                            <option value="Kidney">Kidney</option>
-                            <option value="Liver">Liver</option>
-                            <option value="Heart">Heart</option>
-                            <option value="Lung">Lung</option>
-                            <option value="Pancreas">Pancreas</option>
-                        </select>
+                        <label>Location</label>
+                        <input type="text" name="location" id="edit_donor_location" required>
                     </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select name="status" id="edit_donor_status" required>
-                            <option value="Active">Active</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Inactive">Inactive</option>
-                        </select>
-                    </div>
+
                 </div>
-                <button type="submit" class="btn btn-primary">Update Donor</button>
+                <button type="submit" class="btn btn-primary">Update Admin</button>
             </form>
         </div>
     </div>
 
-    <!-- Add Donation Modal -->
+    <!-- Add Doctor Modal -->
     <div id="addDonationModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add New Donation</h2>
+                <h2>Add New Doctor</h2>
                 <span class="close-btn" onclick="closeModal('addDonationModal')">&times;</span>
             </div>
-            <form method="POST">
-                <input type="hidden" name="action" value="add_donation">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Donation ID</label>
-                        <input type="text" name="donation_id" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Donor ID</label>
-                        <input type="text" name="donor_id" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Organ</label>
-                        <select name="organ" required>
-                            <option value="Kidney">Kidney</option>
-                            <option value="Liver">Liver</option>
-                            <option value="Heart">Heart</option>
-                            <option value="Lung">Lung</option>
-                            <option value="Pancreas">Pancreas</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select name="status" required>
-                            <option value="Pending">Pending</option>
-                            <option value="Completed">Completed</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Date Requested</label>
-                        <input type="date" name="date_requested" required>
-                    </div>
+           <form method="POST"> 
+            <input type="hidden" name="action" value="add_doctor">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="fullname" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Donation</button>
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Location (Workplace)</label>
+                    <input type="text" name="location" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" name="age">
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select name="gender">
+                        <option value="">Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>License</label>
+                    <input type="text" name="license">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="description">
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" name="cpassword" required>
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Doctor</button>
+        </form>
+
+
             </form>
         </div>
     </div>
 
-    <!-- Edit Donation Modal -->
-    <div id="editDonationModal" class="modal">
+
+    <!-- Edit Doctor Modal -->
+    <div id="editDoctorModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Edit Donation</h2>
-                <span class="close-btn" onclick="closeModal('editDonationModal')">&times;</span>
+                <h2>Edit Doctor</h2>
+                <span class="close-btn" onclick="closeModal('editDoctorModal')">&times;</span>
             </div>
             <form method="POST">
-                <input type="hidden" name="action" value="update_donation">
-                <input type="hidden" name="id" id="edit_donation_id">
+                <input type="hidden" name="action" value="update_doctor">
+                <input type="hidden" name="id" id="edit_doctor_id">
+
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Organ</label>
-                        <select name="organ" id="edit_donation_organ" required>
-                            <option value="Kidney">Kidney</option>
-                            <option value="Liver">Liver</option>
-                            <option value="Heart">Heart</option>
-                            <option value="Lung">Lung</option>
-                            <option value="Pancreas">Pancreas</option>
-                        </select>
+                        <label>Username</label>
+                        <input type="text" name="username" id="edit_donor_username" required>
                     </div>
                     <div class="form-group">
-                        <label>Status</label>
-                        <select name="status" id="edit_donation_status" required>
-                            <option value="Pending">Pending</option>
-                            <option value="Completed">Completed</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
+                        <label>Full Name</label>
+                        <input type="text" name="fullname" id="edit_donor_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" id="edit_donor_email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" id="edit_donor_phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" name="location" id="edit_donor_location" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Update Donation</button>
+                <button type="submit" class="btn btn-primary">Update Doctor</button>
             </form>
         </div>
     </div>
+
 
     <!-- Add Notification Modal -->
     <div id="addNotificationModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Send Notification</h2>
-                <span class="close-btn" onclick="closeModal('addNotificationModal')">&times;</span>
-            </div>
-            <form method="POST">
-                <input type="hidden" name="action" value="add_notification">
-                <div class="form-group">
-                    <label>User ID</label>
-                    <input type="text" name="user_id" required>
-                </div>
-                <div class="form-group">
-                    <label>Message</label>
-                    <input type="text" name="message" required>
-                </div>
-                <div class="form-group">
-                    <label>Date</label>
-                    <input type="date" name="date" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Send Notification</button>
-            </form>
+    <div class="modal-content">
+        <div class="modal-header">
+        <h2>Send Notification</h2>
+        <span class="close-btn" onclick="closeModal('addNotificationModal')">&times;</span>
         </div>
+
+        <form method="POST" action="../php/notification_action.php">
+        <input type="hidden" name="action" value="add_notification">
+
+        <div class="form-group">
+            <label>User ID</label>
+            <input type="number" name="user_id" placeholder="Enter User ID" required>
+        </div>
+
+        <div class="form-group">
+            <label>Message</label>
+            <textarea name="message" rows="3" placeholder="Enter notification message" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send Notification</button>
+        </form>
+    </div>
     </div>
 
     <script>
@@ -794,16 +913,27 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
         function openModal(modalId) { document.getElementById(modalId).style.display = 'block'; }
         function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
 
-        function editDonor(donor) {
-            document.getElementById('edit_donor_id').value = donor.id;
-            document.getElementById('edit_donor_name').value = donor.name;
-            document.getElementById('edit_donor_email').value = donor.email;
-            document.getElementById('edit_donor_blood_type').value = donor.blood_type;
-            document.getElementById('edit_donor_organ').value = donor.organ;
-            document.getElementById('edit_donor_status').value = donor.status;
+        function editDonor(user) {
+            document.getElementById('edit_donor_id').value = user.id;
+            document.getElementById('edit_donor_username').value = user.username;
+            document.getElementById('edit_donor_name').value = user.fullname;
+            document.getElementById('edit_donor_email').value = user.email;
+            document.getElementById('edit_donor_phone').value = user.phone;
+            document.getElementById('edit_donor_location').value = user.location;
+
             openModal('editDonorModal');
         }
         document.addEventListener("DOMContentLoaded", () => {
+
+        const msg = document.getElementById("successMessage");
+            if (msg) {
+                setTimeout(() => {
+                    msg.style.transition = "opacity 0.5s";
+                    msg.style.opacity = "0";
+                    setTimeout(() => msg.remove(), 500);
+                }, 3000);
+            }
+
         const organBtn = document.getElementById("organBtn");
         const bloodBtn = document.getElementById("bloodBtn");
         const rows = document.querySelectorAll("#donations tbody tr");
@@ -814,6 +944,17 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
                 row.style.display = (donationType === type) ? "" : "none";
             });
         }
+       const navItems = document.querySelectorAll(".nav-item");
+    const otherNavItems = Array.from(navItems).filter(item => 
+        !item.textContent.includes("Dashboard")
+    );
+
+    otherNavItems.forEach(item => {
+        item.addEventListener("click", () => {
+            otherNavItems.forEach(i => i.classList.remove("active"));
+            item.classList.add("active");
+        });
+    });
 
         organBtn.addEventListener("click", () => {
             organBtn.classList.add("active");
@@ -831,12 +972,17 @@ $donations = $conn->query("SELECT * FROM donations ORDER BY id DESC")->fetchAll(
         filterDonations("organ");
         });
 
-        function editDonation(donation) {
-            document.getElementById('edit_donation_id').value = donation.id;
-            document.getElementById('edit_donation_organ').value = donation.organ;
-            document.getElementById('edit_donation_status').value = donation.status;
-            openModal('editDonationModal');
+        function editDoctor(doctor) {
+            document.getElementById('edit_doctor_id').value = doctor.id;
+            document.getElementById('edit_donor_username').value = doctor.username;
+            document.getElementById('edit_donor_name').value = doctor.fullname;
+            document.getElementById('edit_donor_email').value = doctor.email;
+            document.getElementById('edit_donor_phone').value = doctor.phone;
+            document.getElementById('edit_donor_location').value = doctor.location;
+
+            openModal('editDoctorModal');
         }
+
 
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {

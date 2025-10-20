@@ -24,7 +24,7 @@
 
         <ul class="nav-menu" role="menubar" aria-label="Primary">
             <li class="nav-link"><a href="donation.php" aria-current="page">Donation</a><hr class="nav-underline default-underline"></li>
-            <li class="nav-link"><a href="notification.html">Notification</a><hr class="nav-underline"></li>
+            <li class="nav-link"><a href="notification.php">Notification</a><hr class="nav-underline"></li>
             <li class="nav-link"><a href="history.php">Donation History</a><hr class="nav-underline"></li>
             <li class="nav-link"><a href="profile.php">Profile</a><hr class="nav-underline"></li>
         </ul>

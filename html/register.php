@@ -38,10 +38,7 @@
             <label for="role" class="field-label">Role</label>
             <div class="input-box">
                 <select id="role" name="role" required>
-                    <option value="" disabled selected>Select your role</option>
                     <option value="donor">Donor</option>
-                    <option value="doctor">Doctor</option>
-                    <option value="Admin">Admin</option>
                 </select>
             </div>
 
