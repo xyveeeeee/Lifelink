@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $status = 'Pending';
 
     // specific for blood
-    $blood_type = isset($_POST['blood_type']) ? trim($_POST['blood_type']) : null;
+    $blood_cell = isset($_POST['blood_cell']) ? trim($_POST['blood_cell']) : null;
     $volume = isset($_POST['volume']) ? trim($_POST['volume']) : null;
 
     // specific for organ
@@ -47,9 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // BLOOD DONATION COOLDOWN CHECK
-    if ($donation_type === 'blood' && !empty($blood_type)) {
+    if ($donation_type === 'blood' && !empty($blood_cell)) {
         // cooldown days
-        $cooldown_days = match(strtolower($blood_type)) {
+        $cooldown_days = match(strtolower($blood_cell)) {
             'whole' => 90, // 3 months cd
             'platelet' => 14, // 2 weeks cd
             'plasma' => 28, // 4 weeks cd
@@ -58,9 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         };
 
         // get user's most recent donation of the SAME blood type
-        $check_blood_sql = "SELECT MAX(availability_date) FROM donations WHERE user_id = ? AND LOWER(donation_type) = 'blood' AND LOWER(blood_type) = LOWER(?) AND status IN ('Pending', 'Approved', 'Completed')";
+        $check_blood_sql = "SELECT MAX(availability_date) FROM donations WHERE user_id = ? AND LOWER(donation_type) = 'blood' AND LOWER(blood_cell) = LOWER(?) AND status IN ('Pending', 'Approved', 'Completed')";
         $check_blood_stmt = $conn->prepare($check_blood_sql);
-        $check_blood_stmt->bind_param("is", $user_id, $blood_type);
+        $check_blood_stmt->bind_param("is", $user_id, $blood_cell);
         $check_blood_stmt->execute();
         $check_blood_stmt->bind_result($last_donation_date);
         $check_blood_stmt->fetch();
@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $today = date('Y-m-d');
             if ($today < $next_allowed_date) {
                 echo "<script>
-                    alert('You must wait until $next_allowed_date before donating $blood_type blood again. You can still donate other types of blood');
+                    alert('You must wait until $next_allowed_date before donating $blood_cell blood again. You can still donate other types of blood');
                     window.history.back();
                 </script>";
                 exit();
@@ -79,10 +79,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
     // for new donation
-    $sql = "INSERT INTO donations (user_id, donation_type, organ_type, blood_type, volume, hospital, availability_date, status, created_at)
+    $sql = "INSERT INTO donations (user_id, donation_type, organ_type, blood_cell, volume, hospital, availability_date, status, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isssssss", $user_id, $donation_type, $organ_type, $blood_type, $volume, $hospital, $availability_date, $status);
+    $stmt->bind_param("isssssss", $user_id, $donation_type, $organ_type, $blood_cell, $volume, $hospital, $availability_date, $status);
 
     if ($stmt->execute()) {
         echo "<script>alert('Donation submitted successfully! Thank you for your generosity.'); window.location.href='../html/donation.php';</script>";

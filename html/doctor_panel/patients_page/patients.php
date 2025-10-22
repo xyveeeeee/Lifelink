@@ -4,6 +4,7 @@ include "../doctors_db.php"; // include instead of require_once
 // READ
 $sql = "SELECT * FROM patients ORDER BY id DESC";
 $result = $conn->query($sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -15,6 +16,8 @@ $result = $conn->query($sql);
 
         <title>LifeLink</title>
         <body>
+
+
             <div class="content">
                 <div class="content-container-1">
                     <div class="interactive-content">
@@ -23,38 +26,64 @@ $result = $conn->query($sql);
                         <hr class="interactive-underline">
                         <br>
                         <?php
+
                         // CREATE
                         if (isset($_POST['create'])) {
-                            $status = $_POST['status'];
+                            $status = 'Pending';
                             $name = $_POST['name'];
                             $age = $_POST['age'];
                             $gender = $_POST['gender'];
-                            $organ = $_POST['organ'];
-                            $blood_type = $_POST['blood_type'];
+                            $organ_type = $_POST['organ_type'] ?? null;
+                            $blood_type = $_POST['blood_type'] ?? null;
                             $location = $_POST['location'];
 
-                            $sql = "INSERT INTO patients (status, name, age, gender, organ, blood_type, location) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                            $sql = "INSERT INTO patients (status, name, age, gender, organ_type, blood_type, location) VALUES (?, ?, ?, ?, ?, ?, ?)";
                             $stmt = $conn->prepare($sql);
-                            $stmt->bind_param("ssissss", $status, $name, $age, $gender, $organ, $blood_type, $location);
+                            $stmt->bind_param("ssissss", $status, $name, $age, $gender, $organ_type, $blood_type, $location);
 
                             if ($stmt->execute()) {
-                                echo "<div class='message'><p>New patient has been added!</div></p>";
+                                echo "<script>alert('Patient has been inserted!');</script>";
                                 // Refresh page to show new record
-                                echo "<meta http-equiv='refresh' content='2.5'>";
                             } else {
-                                echo "Error: " . $stmt->error;
+                                echo "<script>alert('Error: ');</script>" . $stmt->error;
                             }
+
+                            echo "<meta http-equiv='refresh' content='0'>";
+
                             $stmt->close();
                         }
                         ?>
                         </p>
                         <form method="POST">
-                            <input type="text" name="status" placeholder="Status" class="add-patient" required>
                             <input type="text" name="name" placeholder="Name" class="add-patient" required>
                             <input type="number" name="age" placeholder="Age" min="1" max="120" class="add-patient" required>
-                            <input type="text" name="gender" placeholder="Gender" class="add-patient" required>
-                            <input type="text" name="organ" placeholder="Needed Organ" class="add-patient" required>
-                            <input type="text" name="blood_type" placeholder="Blood Type" class="add-patient" required>
+                            <select id="gender" name="gender" class="add-patient">
+                                <option value="" disabled selected>Gender</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Other</option>
+                            </select>
+                            <select id="organ_type" name="organ_type" class="add-patient">
+                                <option value="" disabled selected>Needed Organ</option>
+                                <option>Kidney</option>
+                                <option>Liver</option>
+                                <option>Heart</option>
+                                <option>Lungs</option>
+                                <option>Pancreas</option>
+                                <option>Intestine</option>
+                                <option>Cornea</option>
+                            </select>
+                            <select id="blood_type" name="blood_type" class="add-patient">
+                                <option value="" disabled selected>Blood Type</option>
+                                <option>A+</option>
+                                <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
+                                <option>O+</option>
+                                <option>O-</option>
+                            </select>
                             <input type="text" name="location" placeholder="Location" class="add-patient" required>
                             <button type="submit" name="create">Add</button>
                         </form>
@@ -93,7 +122,7 @@ $result = $conn->query($sql);
                                             <td><p>" . htmlspecialchars($row['name']) . "</p></td>
                                             <td><p>" . htmlspecialchars($row['age']) . "</p></td>
                                             <td><p>" . htmlspecialchars($row['gender']) . "</p></td>
-                                            <td><p>" . htmlspecialchars($row['organ']) . "</p></td>
+                                            <td><p>" . htmlspecialchars($row['organ_type']) . "</p></td>
                                             <td><p>" . htmlspecialchars($row['blood_type']) . "</p></td>
                                             <td><p>" . htmlspecialchars($row['location']) . "</p></td>
                                             <td><p>" . htmlspecialchars($row['created_at']) . "</p></td>

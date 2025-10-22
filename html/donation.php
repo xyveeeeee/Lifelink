@@ -72,7 +72,7 @@
             <div id="bloodType" style="display: none;">
                 <label for="blood" class="field-label">Type of Blood Donation</label>
                 <div class="input-box">
-                <select id="blood" name="blood_type">
+                <select id="blood" name="blood_cell">
                     <option value="" disabled selected>Select blood donation type</option>
                     <option value="Whole Blood">Whole Blood</option>
                     <option value="Platelet">Platelet (Apheresis)</option>

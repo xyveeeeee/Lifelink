@@ -1,7 +1,7 @@
 <?php
 include '../doctors_db.php';
 require_once '../../../php/check_session.php';
-$required_role = 'donor';
+$required_role = 'doctor';
 
 // ✅ Ensure user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -72,8 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $age = intval($_POST['age']);
         $gender = mysqli_real_escape_string($conn, $_POST['gender']);
         $license = mysqli_real_escape_string($conn, $_POST['license']);
-        $location = mysqli_real_escape_string($conn, $_POST['location']); // ✅ your column name
-        $description = mysqli_real_escape_string($conn, $_POST['description']); // ✅ text input
+        $location = mysqli_real_escape_string($conn, $_POST['location']); 
+        $description = mysqli_real_escape_string($conn, $_POST['description']); 
 
         $check = mysqli_query($conn, "SELECT id FROM doctor WHERE id = $id");
 
@@ -96,7 +96,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo "<meta http-equiv='refresh' content='0'>";
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

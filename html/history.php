@@ -112,7 +112,7 @@ require_once '../php/fetch_donations.php';
             <?php foreach ($bloodDonations as $row): ?>
               <tr>
                 <td><?= 'B-' . str_pad($row['id'], 4, '0', STR_PAD_LEFT) ?></td>
-                <td><?= htmlspecialchars($row['blood_type']) ?></td>
+                <td><?= htmlspecialchars($row['blood_cell']) ?></td>
                 <td><?= htmlspecialchars($row['volume']) ?></td>
                 <td class="<?= strtolower($row['status']) ?>"><?= htmlspecialchars($row['status']) ?></td>
                 <td><?= htmlspecialchars($row['hospital']) ?></td>

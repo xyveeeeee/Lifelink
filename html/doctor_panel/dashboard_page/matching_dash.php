@@ -3,39 +3,56 @@ include "../doctors_db.php";
 
 //AVAILABLE DONORS FUNCTION
 function displayAvailableDonors($conn) {
-    $donationTypeQuery = "SELECT donation_type, COUNT(*) AS total FROM donors WHERE status = 'Pending' GROUP BY donation_type";
-    $organQuery = "SELECT organ, COUNT(*) AS total FROM donors WHERE status = 'Pending' GROUP BY organ";
-    $bloodTypeQuery = "SELECT blood_type, COUNT(*) AS total FROM donors WHERE status = 'Pending' GROUP BY blood_type";
+    $organ_type = "
+        SELECT organ_type, COUNT(*) AS total 
+        FROM donations 
+        WHERE status = 'Pending' 
+            AND organ_type IS NOT NULL 
+        GROUP BY organ_type
+    ";
+    $blood_cell = "
+        SELECT blood_cell, COUNT(*) AS total
+        FROM donations WHERE status = 'Pending'
+            AND blood_cell IS NOT NULL
+        GROUP BY blood_cell
+        ";
+    $blood_type = "
+        SELECT blood_type, COUNT(*) AS total 
+        FROM donations 
+        WHERE status = 'Pending' 
+            AND blood_type IS NOT NULL 
+        GROUP BY blood_type
+    ";
+    
+    $organ_typeResult = $conn->query($organ_type);
+    $blood_cellResult = $conn->query($blood_cell);
+    $blood_typeResult = $conn->query($blood_type);
 
-    $donationTypeResult = $conn->query($donationTypeQuery);
-    $organResult = $conn->query($organQuery);
-    $bloodTypeResult = $conn->query($bloodTypeQuery);
+    $maxDonorRows = max($organ_typeResult->num_rows, $blood_cellResult->num_rows, $blood_typeResult->num_rows);
 
-    $maxRows = max($donationTypeResult->num_rows, $organResult->num_rows, $bloodTypeResult->num_rows);
-
-    for ($i = 0; $i < $maxRows; $i++) {
+    for ($i = 0; $i < $maxDonorRows; $i++) {
         echo "<tr>";
 
-        // Donation Type column
-        $donationRow = $donationTypeResult->fetch_assoc();
-        if ($donationRow) {
-            echo "<td>{$donationRow['donation_type']}</td><td>{$donationRow['total']}</td>";
+        // ORGAN COLUMN
+        $organ_typeRow = $organ_typeResult->fetch_assoc();
+        if ($organ_typeRow) {
+            echo "<td>{$organ_typeRow['organ_type']}</td><td>{$organ_typeRow['total']}</td>";
         } else {
             echo "<td></td><td></td>";
         }
 
-        // Organ column
-        $organRow = $organResult->fetch_assoc();
-        if ($organRow) {
-            echo "<td>{$organRow['organ']}</td><td>{$organRow['total']}</td>";
+        // BLOOD CELL COLUMN
+        $blood_cellRow = $blood_cellResult->fetch_assoc();
+        if ($blood_cellRow) {
+            echo "<td>{$blood_cellRow['blood_cell']}</td><td>{$blood_cellRow['total']}</td>";
         } else {
             echo "<td></td><td></td>";
         }
 
-        // Blood Type column
-        $bloodRow = $bloodTypeResult->fetch_assoc();
-        if ($bloodRow) {
-            echo "<td>{$bloodRow['blood_type']}</td><td>{$bloodRow['total']}</td>";
+        // BLOOD TYPE
+        $blood_typeRow = $blood_typeResult->fetch_assoc();
+        if ($blood_typeRow) {
+            echo "<td>{$blood_typeRow['blood_type']}</td><td>{$blood_typeRow['total']}</td>";
         } else {
             echo "<td></td><td></td>";
         }
@@ -46,29 +63,41 @@ function displayAvailableDonors($conn) {
 
 //PATIENT NEEDS FUNCTION
 function displayPatientNeeds($conn) {
-    $patientOrganQuery = "SELECT organ, COUNT(*) AS total FROM patients WHERE status = 'Pending' GROUP BY organ";
-    $patientBloodTypeQuery = "SELECT blood_type, COUNT(*) AS total FROM patients WHERE status = 'Pending' GROUP BY blood_type";
+    $organ_type = "
+        SELECT organ_type, COUNT(*) AS total 
+        FROM patients
+        WHERE status = 'Pending' 
+            AND organ_type IS NOT NULL 
+        GROUP BY organ_type
+    ";
+    $blood_type = "
+        SELECT blood_type, COUNT(*) AS total 
+        FROM patients
+        WHERE status = 'Pending' 
+            AND blood_type IS NOT NULL 
+        GROUP BY blood_type
+    ";
 
-    $patientOrganResult = $conn->query($patientOrganQuery);
-    $patientBloodTypeResult = $conn->query($patientBloodTypeQuery);
+    $organ_typeResult = $conn->query($organ_type);
+    $blood_typeResult = $conn->query($blood_type);
     
-    $maxPatientRows = max($patientOrganResult->num_rows, $patientBloodTypeResult->num_rows);
+    $maxPatientRows = max($organ_typeResult->num_rows, $blood_typeResult->num_rows);
 
     for ($i = 0; $i < $maxPatientRows; $i++) {
         echo "<tr>";
 
-        // Organ column
-        $patientOrganRow = $patientOrganResult->fetch_assoc();
-        if ($patientOrganRow) {
-            echo "<td>{$patientOrganRow['organ']}</td><td>{$patientOrganRow['total']}</td>";
+        // ORGAN COLUMN
+        $organ_typeRow = $organ_typeResult->fetch_assoc();
+        if ($organ_typeRow) {
+            echo "<td>{$organ_typeRow['organ_type']}</td><td>{$organ_typeRow['total']}</td>";
         } else {
             echo "<td></td><td></td>";
         }
 
-        // Blood type column
-        $patientBloodRow = $patientBloodTypeResult->fetch_assoc();
-        if ($patientBloodRow) {
-            echo "<td>{$patientBloodRow['blood_type']}</td><td>{$patientBloodRow['total']}</td>";
+        // BLOOD TYPE COLUMN
+        $blood_typeRow = $blood_typeResult->fetch_assoc();
+        if ($blood_typeRow) {
+            echo "<td>{$blood_typeRow['blood_type']}</td><td>{$blood_typeRow['total']}</td>";
         } else {
             echo "<td></td><td></td>";
         }
@@ -79,34 +108,65 @@ function displayPatientNeeds($conn) {
 
 //NEW MATCHES FUNCTION
 function displayNewMatches($conn) {
+    //MATCHING FUNCTION
     $sql = "
     SELECT 
-        d.id AS donor_id,
-        d.name AS donor_name,
+        d.id AS donation_id,
+        d.blood_cell AS donation_cell,
+        d.user_id,
+        u.id AS donor_id,
+        u.fullname AS donor_name,
         p.id AS patient_id,
         p.name AS patient_name,
-        CASE 
-            WHEN d.organ = p.organ AND d.blood_type = p.blood_type THEN 'Both'
-            WHEN d.organ = p.organ THEN 'Organ'
-            WHEN d.blood_type = p.blood_type THEN 'Blood Type'
+        CASE
+            WHEN d.organ_type = p.organ_type AND d.organ_type IS NOT NULL THEN 'Organ'
+            WHEN d.blood_type = p.blood_type AND d.blood_type IS NOT NULL THEN d.blood_cell
         END AS match_type,
-        CASE 
-            WHEN d.organ = p.organ AND d.blood_type = p.blood_type THEN CONCAT(d.organ, ' / ', d.blood_type)
-            WHEN d.organ = p.organ THEN d.organ
-            WHEN d.blood_type = p.blood_type THEN d.blood_type
-        END AS matched_value,
-        d.status AS donor_status,
-        p.status AS patient_status
-    FROM donors d
+        COALESCE(d.organ_type, d.blood_type) AS matched_value
+    FROM donations d
+    INNER JOIN users u ON d.user_id = u.id
     INNER JOIN patients p
-        ON (d.organ = p.organ OR d.blood_type = p.blood_type)
-    WHERE d.status = 'Pending' AND p.status = 'Pending'
+        ON (
+            (d.organ_type = p.organ_type AND d.organ_type IS NOT NULL)
+            OR
+            (d.blood_type = p.blood_type AND d.blood_type IS NOT NULL)
+        )
+    WHERE LOWER(d.status) = 'pending'
+    AND LOWER(p.status) = 'pending'
     ORDER BY match_type
     ";
 
+    //CONFIRM FUNCTION
+    if (isset($_GET['confirm'])) {
+        $donation_id = intval($_GET['donation_id']);
+        $patient_id = intval($_GET['patient_id']);
+
+        $update_donor = "UPDATE donations SET status='Confirmed' WHERE id=$donation_id";
+        $update_patient = "UPDATE patients SET status='Confirmed' WHERE id=$patient_id";
+
+        if (mysqli_query($conn, $update_donor) && mysqli_query($conn, $update_patient)) {
+            echo "<script>alert('Request has been confirmed!');</script>";
+        } else {
+            echo "<script>alert('Error confirming request: " . mysqli_error($conn) . "');</script>";
+        }
+    }
+
+    //DECLINE FUNCTION
+    if (isset($_GET['decline'])) {
+        $donation_id = intval($_GET['donation_id']);
+
+        $update_donor = "UPDATE donations SET status='Declined' WHERE id=$donation_id";
+
+        if (mysqli_query($conn, $update_donor)) {
+            echo "<script>alert('Request has been declined!');</script>";
+        } else {
+            echo "<script>alert('Error declining request: " . mysqli_error($conn) . "');</script>";
+        }
+    }
+
     $result = $conn->query($sql);
 
-    if ($result && $result->num_rows > 0) {
+    if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo "
                 <div class='report-box'>
@@ -114,19 +174,20 @@ function displayNewMatches($conn) {
                     <p class='report-text'><strong>Patient:</strong> {$row['patient_id']} - {$row['patient_name']}</p>
                     <p class='report-text'><strong>{$row['match_type']}</strong></p>
                     <p class='report-text'><strong>{$row['matched_value']}</strong></p>
+                    <div class'buttons'>
+                        <a href='?confirm=1&donation_id={$row['donation_id']}&patient_id={$row['patient_id']}' class='confirm'>
+                            Confirm
+                        </a>
+                        <a href='?decline=1&donation_id={$row['donation_id']}' class='decline'>
+                            Decline
+                        </a>
+                    </div>
                 </div>
                 ";
         }
+        
     } else {
         echo "<p>No matches found.</p>";
     }
-
-    $conn->close();
-    }
-
-/*
-function displayRequests($conn) {
-    
 }
-*/
 ?>

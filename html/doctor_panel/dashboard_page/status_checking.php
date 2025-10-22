@@ -2,7 +2,8 @@
 include "../doctors_db.php";
 
 function displayCurrentlyOnGoing1($conn) {
-    $sql = "SELECT COUNT(*) AS total_pending FROM donors WHERE status = 'Pending'";
+    //TOTAL OF DONORS
+    $sql = "SELECT COUNT(*) AS total_pending FROM donations WHERE status = 'Pending'";
     $result = $conn->query($sql);
 
     if ($result && $row = $result->fetch_assoc()) {
@@ -15,6 +16,7 @@ function displayCurrentlyOnGoing1($conn) {
 }
 
 function displayCurrentlyOnGoing2($conn) {
+    //TOTAL OF PATIENTS
     $sql = "SELECT COUNT(*) AS total_pending FROM patients WHERE status = 'Pending'";
     $result = $conn->query($sql);
 
@@ -28,16 +30,19 @@ function displayCurrentlyOnGoing2($conn) {
 }
 
 function displayFoundMatches($conn) {
+    //TOTAL OF ORGANS
     echo "<h3 class='other-text'>Organ Match</h3>";
 
     $sql_organ = "
         SELECT 
-            d.organ, 
+            d.organ_type, 
             COUNT(*) AS total_matches
-        FROM donors d
+        FROM donations d
         INNER JOIN patients p
-            ON d.organ = p.organ
-        GROUP BY d.organ
+            ON d.organ_type = p.organ_type
+        WHERE d.status = 'Pending'
+        AND p.status = 'Pending'
+        GROUP BY d.organ_type
         ORDER BY total_matches DESC
     ";
 
@@ -51,7 +56,7 @@ function displayFoundMatches($conn) {
                 </tr>";
         while ($row = $result_organ->fetch_assoc()) {
             echo "<tr>
-                    <td>{$row['organ']}</td>
+                    <td>{$row['organ_type']}</td>
                     <td>{$row['total_matches']}</td>
                 </tr>";
         }
@@ -60,15 +65,18 @@ function displayFoundMatches($conn) {
         echo "<p>No organ matches found.</p>";
     }
 
+    //TOTAL OF BLOOD TYPES
     echo "<h3 class='other-text'>Blood Type Match</h3>";
 
     $sql_blood = "
         SELECT 
             d.blood_type, 
             COUNT(*) AS total_matches
-        FROM donors d
+        FROM donations d
         INNER JOIN patients p
             ON d.blood_type = p.blood_type
+        WHERE d.status = 'Pending'
+        AND p.status = 'Pending'
         GROUP BY d.blood_type
         ORDER BY total_matches DESC
     ";
@@ -93,13 +101,14 @@ function displayFoundMatches($conn) {
     }
 }
 
-function displayCompletedTasks($conn) {
-    $sql = "SELECT COUNT(*) AS total_completion FROM donors WHERE status = 'Completed'";
+function displayConfirmedMatches($conn) {
+    //TOTAL OF CONFIRMATION
+    $sql = "SELECT COUNT(*) AS total_confirmation FROM donations WHERE status = 'Confirmed'";
     $result = $conn->query($sql);
 
     if ($result && $row = $result->fetch_assoc()) {
-        echo "<div class='completed-box'>";
-        echo "<p>Total Completion: <strong>{$row['total_completion']}</strong></p>";
+        echo "<div class='confirmed-box'>";
+        echo "<p>Total Matches: <strong>{$row['total_confirmation']}</strong></p>";
         echo "</div>";
     } else {
         echo "<p>No pending donors found.</p>";
@@ -108,12 +117,12 @@ function displayCompletedTasks($conn) {
     echo "</td>";
     echo "<td>";
 
-    $sql = "SELECT COUNT(*) AS total_completion FROM patients WHERE status = 'Completed'";
+    $sql = "SELECT COUNT(*) AS total_confirmation FROM patients WHERE status = 'Confirmed'";
     $result = $conn->query($sql);
 
     if ($result && $row = $result->fetch_assoc()) {
-        echo "<div class='completed-box'>";
-        echo "<p>Total Completion: <strong>{$row['total_completion']}</strong></p>";
+        echo "<div class='confirmed-box'>";
+        echo "<p>Total Matches: <strong>{$row['total_confirmation']}</strong></p>";
         echo "</div>";
     } else {
         echo "<p>No pending donors found.</p>";

@@ -40,7 +40,7 @@ if ($med_result && mysqli_num_rows($med_result) > 0) {
     $medical = [
         'age' => '',
         'gender' => '',
-        'type_blood' => ''
+        'blood_type' => ''
     ];
 }
 
@@ -82,16 +82,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($section === "medical") {
             $age = intval($_POST['age']);
             $gender = mysqli_real_escape_string($conn, $_POST['gender']);
-            $type_blood = mysqli_real_escape_string($conn, $_POST['type_blood']);
+            $blood_type = mysqli_real_escape_string($conn, $_POST['blood_type']);
 
             $check = mysqli_query($conn, "SELECT * FROM donations WHERE user_id=$user_id");
             if (mysqli_num_rows($check) > 0) {
                 $sql = "UPDATE donations
-                        SET age=$age, gender='$gender', type_blood='$type_blood' 
+                        SET age=$age, gender='$gender', blood_type='$blood_type' 
                         WHERE user_id=$user_id";
             } else {
-                $sql = "INSERT INTO donations (user_id, age, gender, type_blood)
-                        VALUES ($user_id, $age, '$gender', '$type_blood')";
+                $sql = "INSERT INTO donations (user_id, age, gender, blood_type)
+                        VALUES ($user_id, $age, '$gender', '$blood_type')";
             }
 
             if (mysqli_query($conn, $sql)) {
@@ -584,16 +584,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <div class="form-row">
                 <label> 
                     Blood Type:
-                    <select name="type_blood" required>
+                    <select name="blood_type" required>
                         <option value="">Select Blood Type</option>
-                        <option value="A+" <?= ($medical['type_blood'] ?? '') == 'A+' ? 'selected' : '' ?>>A+</option>
-                        <option value="A-" <?= ($medical['type_blood'] ?? '') == 'A-' ? 'selected' : '' ?>>A-</option>
-                        <option value="B+" <?= ($medical['type_blood'] ?? '') == 'B+' ? 'selected' : '' ?>>B+</option>
-                        <option value="B-" <?= ($medical['type_blood'] ?? '') == 'B-' ? 'selected' : '' ?>>B-</option>
-                        <option value="AB+" <?= ($medical['type_blood'] ?? '') == 'AB+' ? 'selected' : '' ?>>AB+</option>
-                        <option value="AB-" <?= ($medical['type_blood'] ?? '') == 'AB-' ? 'selected' : '' ?>>AB-</option>
-                        <option value="O+" <?= ($medical['type_blood'] ?? '') == 'O+' ? 'selected' : '' ?>>O+</option>
-                        <option value="O-" <?= ($medical['type_blood'] ?? '') == 'O-' ? 'selected' : '' ?>>O-</option>
+                        <option value="A+" <?= ($medical['blood_type'] ?? '') == 'A+' ? 'selected' : '' ?>>A+</option>
+                        <option value="A-" <?= ($medical['blood_type'] ?? '') == 'A-' ? 'selected' : '' ?>>A-</option>
+                        <option value="B+" <?= ($medical['blood_type'] ?? '') == 'B+' ? 'selected' : '' ?>>B+</option>
+                        <option value="B-" <?= ($medical['blood_type'] ?? '') == 'B-' ? 'selected' : '' ?>>B-</option>
+                        <option value="AB+" <?= ($medical['blood_type'] ?? '') == 'AB+' ? 'selected' : '' ?>>AB+</option>
+                        <option value="AB-" <?= ($medical['blood_type'] ?? '') == 'AB-' ? 'selected' : '' ?>>AB-</option>
+                        <option value="O+" <?= ($medical['blood_type'] ?? '') == 'O+' ? 'selected' : '' ?>>O+</option>
+                        <option value="O-" <?= ($medical['blood_type'] ?? '') == 'O-' ? 'selected' : '' ?>>O-</option>
                     </select>
                 </label>
 
